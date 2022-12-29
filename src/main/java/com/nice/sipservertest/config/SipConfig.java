@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.sip.*;
+import javax.sip.address.AddressFactory;
+import javax.sip.header.HeaderFactory;
 import javax.sip.message.MessageFactory;
 import java.util.Properties;
 import java.util.TooManyListenersException;
@@ -40,10 +42,21 @@ public class SipConfig {
     }
 
     @Bean
-    SipListener sipListener(MessageFactory messageFactory, SipStack sipStack, ListeningPoint listeningPoint)
+    HeaderFactory headerFactory(SipFactory sipFactory) throws PeerUnavailableException {
+        return sipFactory.createHeaderFactory();
+    }
+
+    @Bean
+    AddressFactory addressFactory(SipFactory sipFactory) throws PeerUnavailableException {
+        return sipFactory.createAddressFactory();
+    }
+
+    @Bean
+    SipListener sipListener(MessageFactory messageFactory, HeaderFactory headerFactory, AddressFactory addressFactory, SipStack sipStack,
+                            ListeningPoint listeningPoint)
             throws TooManyListenersException, ObjectInUseException {
         SipProvider sipProvider = sipStack.createSipProvider(listeningPoint);
-        return new SipListenerImpl(messageFactory, sipProvider);
+        return new SipListenerImpl(messageFactory, headerFactory, addressFactory, sipProvider);
     }
 
     @Bean
