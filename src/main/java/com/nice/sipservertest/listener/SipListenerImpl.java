@@ -67,7 +67,7 @@ public class SipListenerImpl implements SipListener {
         c.setContentType("application");
         c.setContentSubType("sdp");
         Response response = messageFactory.createResponse(200, request, c, contentString.getBytes());
-        ContactHeader contactHeader = headerFactory.createContactHeader(addressFactory.createAddress(String.format("sip:%s:%d", "35.85.153.190",
+        ContactHeader contactHeader = headerFactory.createContactHeader(addressFactory.createAddress(String.format("sip:%s:%d", "54.190.30.227",
                 5060)));
         response.addHeader(contactHeader);
         transaction.sendResponse(response);
